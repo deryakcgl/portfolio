@@ -1,0 +1,91 @@
+#include "stm32f4xx.h"                  // Device header
+
+void Delay(uint32_t time)
+{//delay function 
+
+​while(time)
+​​time--;
+}
+int main()
+{
+​GPIO_InitTypeDef GPIO_InitStructure;
+​
+​uint8_t button_input, sayac=0;
+
+​//CLOCK 
+​RCC_AHB1PeriphClockCmd (RCC_AHB1Periph_GPIOD, ENABLE) ;
+ RCC_AHB1PeriphClockCmd (RCC_AHB1Periph_GPIOA, ENABLE) ;
+​
+​//LED 
+ GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+​GPIO_InitStructure.GPIO_Pin  = GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15 | GPIO_Pin_5 ;
+​GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+​GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+​GPIO_Init (GPIOD, &GPIO_InitStructure);
+​//BUTTON 
+​GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
+​GPIO_InitStructure.GPIO_Pin  = GPIO_Pin_0 ;
+​GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+​GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
+​GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+​GPIO_Init (GPIOA, &GPIO_InitStructure);
+​
+​
+​
+​while(1) //loop for leds
+{
+​
+
+​button_input = GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0);
+​while (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0));
+​
+​sayac= sayac + button_input;
+​Delay(800000);
+​
+​if(sayac==1)
+​{
+​​GPIO_SetBits(GPIOD, GPIO_Pin_12);
+​  GPIO_SetBits(GPIOD, GPIO_Pin_13);
+​  GPIO_SetBits(GPIOD, GPIO_Pin_14);
+​  GPIO_SetBits(GPIOD, GPIO_Pin_15);
+​​GPIO_SetBits(GPIOD, GPIO_Pin_5);
+​}
+​
+​else if (sayac==2)
+​{ GPIO_SetBits(GPIOD, GPIO_Pin_12);
+​​GPIO_ResetBits(GPIOD, GPIO_Pin_5);
+​  GPIO_ResetBits(GPIOD, GPIO_Pin_13);
+​  GPIO_ResetBits(GPIOD, GPIO_Pin_14);
+​  GPIO_ResetBits(GPIOD, GPIO_Pin_15);}
+​else if (sayac==3){
+​​;
+​  GPIO_ResetBits(GPIOD, GPIO_Pin_12);}
+​else if (sayac==4)
+​{  GPIO_SetBits(GPIOD, GPIO_Pin_12);
+​  GPIO_SetBits(GPIOD, GPIO_Pin_13);}
+​else if (sayac==5)
+​{ GPIO_ResetBits(GPIOD, GPIO_Pin_12);
+ ​GPIO_ResetBits(GPIOD, GPIO_Pin_13);}
+​else if (sayac==6)
+​{GPIO_SetBits(GPIOD, GPIO_Pin_12);
+ ​GPIO_SetBits(GPIOD, GPIO_Pin_13);
+ ​GPIO_SetBits(GPIOD, GPIO_Pin_14);}
+​else if (sayac==7)
+​{  GPIO_ResetBits(GPIOD, GPIO_Pin_12);
+​  GPIO_ResetBits(GPIOD, GPIO_Pin_13);
+​  GPIO_ResetBits(GPIOD, GPIO_Pin_14);}
+​else if (sayac==8)
+​{ GPIO_SetBits(GPIOD, GPIO_Pin_12);
+​  GPIO_SetBits(GPIOD, GPIO_Pin_13);
+​  GPIO_SetBits(GPIOD, GPIO_Pin_14);
+​  GPIO_SetBits(GPIOD, GPIO_Pin_15);}
+​else if (sayac==9)
+​{GPIO_ResetBits(GPIOD, GPIO_Pin_12);
+​  GPIO_ResetBits(GPIOD, GPIO_Pin_13);
+​  GPIO_ResetBits(GPIOD, GPIO_Pin_14);
+​  GPIO_ResetBits(GPIOD, GPIO_Pin_15);
+​​GPIO_SetBits(GPIOD, GPIO_Pin_5);
+​  sayac=0;
+ }
+ }
+}
